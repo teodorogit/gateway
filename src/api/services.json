@@ -3,8 +3,14 @@
     "route": "/github",
     "target": "https://github.com/teodorogit.png"
   },
+
   {
     "route": "/admin",
+    "target": "https://github.com/teodorogit.png"
+  },
+  
+  {
+    "route": "/admin001",
     "target": "https://github.com/teodorogit.png"
   }
 ]

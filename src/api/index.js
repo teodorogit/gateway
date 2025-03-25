@@ -1,9 +1,9 @@
-import {postRoute, deleteRoute, rateLimitAndTimeout} from './routes.js'
+import {getRoute, postRoute, deleteRoute, rateLimitAndTimeout} from './routes.js'
 
 function loadRoutes(app) {
+  getRoute(app)
   postRoute(app),
   deleteRoute(app);
-  rateLimitAndTimeout
 }
 
-export default loadRoutes;
+export {loadRoutes, rateLimitAndTimeout}

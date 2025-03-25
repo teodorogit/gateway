@@ -17,7 +17,7 @@ setInterval(() => {
   });
 }, interval);
 
-function rateLimitAndTimeout(req, res, next) {
+const  rateLimitAndTimeout = (req, res, next) => {
   const ip = req.ip;
   requestCounts[ip] = (requestCounts[ip] || 0) + 1;
 
@@ -39,7 +39,6 @@ function rateLimitAndTimeout(req, res, next) {
     });
     req.abort();
   });
-
   next();
 }
 
@@ -47,6 +46,25 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const servicesPath = path.join(__dirname, 'services.json');
 let services = JSON.parse(fs.readFileSync(servicesPath, 'utf-8'));
+
+
+const getRoute = (app) => {
+  app.get('/api/*', authMiddleware(null, null), (req, res) => {
+    const userRole = req.userRole;
+    const requestedRoute = req.path;
+
+    if (!userRoles[userRole].isAdmin) {
+      const allowedEndpoints = userRoles[userRole].allowedEndpoints;
+      if (allowedEndpoints.includes(requestedRoute)) {
+        res.status(200).json({ message: `Access granted to ${requestedRoute}` });
+      } else {
+        res.status(403).json({ message: 'Forbidden: You do not have access to this endpoint' });
+      }
+    } else {
+      res.status(200).json({ message: 'Access granted to admin' });
+    }
+  });
+};
 
 const postRoute = (app) => {
   app.post('/create', authMiddleware(null, null), (req, res) => {
@@ -91,4 +109,5 @@ const postRoute = (app) => {
   });
 }
 
-export {postRoute, deleteRoute, rateLimitAndTimeout};
+
+export {getRoute, postRoute, deleteRoute, rateLimitAndTimeout};

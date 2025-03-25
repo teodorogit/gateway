@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import loadServices from './src/api/index.js';
+import {loadRoutes, rateLimitAndTimeout} from './src/api/index.js';
 
 const app = express();
 
@@ -12,7 +12,8 @@ app.use(helmet()); // Add security headers
 app.use(morgan("combined")); // Log HTTP requests
 app.disable("x-powered-by"); // Hide Express server information
 
-loadServices(app);
+loadRoutes(app);
+app.use(rateLimitAndTimeout)
 
 app.use((_req, res) => {
   res.status(404).json({
