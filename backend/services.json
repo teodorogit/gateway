@@ -1,16 +1,18 @@
 [
   {
-    "route": "/github",
-    "target": "https://github.com/teodorogit.png"
-  },
-
-  {
     "route": "/admin",
     "target": "https://github.com/teodorogit.png"
   },
-  
   {
     "route": "/admin001",
     "target": "https://github.com/teodorogit.png"
+  },
+  {
+    "route": "/novoGithub",
+    "target": "https://github.com"
+  },
+  {
+    "route": "NOVA",
+    "target": "Http://novanovanova.com"
   }
 ]

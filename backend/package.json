@@ -4,16 +4,21 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "startServer": "node server.js",
+    "startAuthServer": "node authServer.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.17.1",
     "helmet": "^4.6.0",
+    "http-proxy-middleware": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "http-proxy-middleware": "^2.0.0"
+    "pg": "^8.14.1"
   },
   "type": "module"
 }
