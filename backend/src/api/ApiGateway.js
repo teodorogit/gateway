@@ -3,9 +3,10 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import authMiddleware from '../../src/middlewares/authMiddleware.js';
+import authMiddleware from '../middlewares/authMiddleware.js';
 import userRoles from '../utils/userRoles.js';
 import Service from './Service.js';
+import axios from 'axios'
 
 
 class ApiGateway {
@@ -25,19 +26,26 @@ class ApiGateway {
   }
 
   configureRoutes() {
-    this.app.get('/api/*', authMiddleware(null, null), (req, res) => {
+    this.app.get('/api/*', authMiddleware(null, null), async (req, res, next) => {
       const userRole = req.userRole;
       const requestedRoute = req.path;
+      console.log('REQUEST: ', requestedRoute);
 
       if (!userRoles[userRole].isAdmin) {
         const allowedEndpoints = userRoles[userRole].allowedEndpoints;
         if (allowedEndpoints.includes(requestedRoute)) {
-          res.status(200).json({ message: `Access granted to ${requestedRoute}` });
+        //  res.status(200).json({message:'Welcome to api gateway!'})
+         next()
         } else {
-          res.status(403).json({ message: ': You do not have access to this endpoint' });
+          res.status(403).json({ message: 'You do not have access to this endpoint' });
         }
       } else {
-        res.status(200).json({ message: 'Access granted to admin' });
+        try {
+            // res.status(200).json({message:'Welcome to api gateway!'})
+            next()
+          } catch {
+            res.status(404).json({ message: 'Route not found' });
+          }
       }
     });
 
@@ -51,9 +59,12 @@ class ApiGateway {
 
       if (userRoles[userRole].canCreateRoutes) {
         const service = new Service(route, target);
-        this.serviceManager.addService(service);
-        this.app.use(route, createProxyMiddleware({ target, changeOrigin: true }));
-        res.status(201).json({ message: 'Service added successfully' });
+       const createRoute =  this.serviceManager.addService(service);
+       if(createRoute){
+         this.app.use(route, createProxyMiddleware({ target, changeOrigin: true }));
+         res.status(201).json({ message: 'Service added successfully' });
+       }
+       res.status(401).json("You trying to create a route that already exist or has a forbidden route name")
       } else {
         res.status(403).json({ message: 'Forbidden: Your current User do not have permission to create routes' });
       }
@@ -95,7 +106,9 @@ class ApiGateway {
       }
     });
 
-    // this.app.get('/apis', au)
+    this.app.get('/list', authMiddleware(null, null), (req,res) => {
+      return res.json(this.serviceManager.loadServices())
+    })
   }
 
   start(port) {

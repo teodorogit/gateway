@@ -11,7 +11,7 @@ app.use(express.json()); // Middleware para processar JSON
 let refreshTokens = [];
 
 const generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '120s' });
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '320s' });
 };
 
 app.post('/token', (req, res) => {

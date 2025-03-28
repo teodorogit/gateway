@@ -4,6 +4,10 @@
     "target": "https://github.com/teodorogit.png"
   },
   {
+    "route": "/github",
+    "target": "https://github.com/teodorogit.png"
+  },
+  {
     "route": "/admin001",
     "target": "https://github.com/teodorogit.png"
   },
@@ -12,7 +16,11 @@
     "target": "https://github.com"
   },
   {
-    "route": "NOVA",
-    "target": "Http://novanovanova.com"
+    "route": "/nova",
+    "target": "http://localhost"
+  },
+  {
+    "route": "/bureau",
+    "target": "hhtp://bureaul,com"
   }
 ]

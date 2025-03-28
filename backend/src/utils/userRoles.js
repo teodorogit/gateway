@@ -4,7 +4,6 @@ const userRoles = {
     canCreateRoutes: false,
     canDeleteRoutes: false,
     canUpdateRoutes:false,
-
     isAdmin: false,
   },
   
